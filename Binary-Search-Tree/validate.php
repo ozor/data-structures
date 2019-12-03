@@ -2,12 +2,16 @@
 
 class TreeNode
 {
+    /** @var int|null  */
     public $val = null;
 
+    /** @var TreeNode|null  */
     public $left = null;
+
+    /** @var TreeNode|null  */
     public $right = null;
 
-    public function __construct($value)
+    public function __construct(int $value)
     {
         $this->val = $value;
     }
@@ -26,11 +30,34 @@ class TreeNode
 class Validate
 {
     /**
-     * @param TreeNode $root
+     * @param TreeNode|null $root
      * @return bool
      */
-    public function isValidBST(TreeNode $root): bool
+    public function isValidBST(?TreeNode $root): bool
     {
-        return false;
+        return $this->validateNode($root, null, null);
+    }
+
+    private function validateNode(?TreeNode $node, $lowLimit, $upLimit)
+    {
+        if (is_null($node)) {
+            return true;
+        }
+
+        if (!is_null($lowLimit) && $node->val <= $lowLimit) {
+            return false;
+        }
+        if (!is_null($upLimit) && $node->val >= $upLimit) {
+            return false;
+        }
+
+        if (! $this->validateNode($node->left, $lowLimit, $node->val)) {
+            return false;
+        }
+        if (! $this->validateNode($node->right, $node->val, $upLimit)) {
+            return false;
+        }
+
+        return true;
     }
 }
